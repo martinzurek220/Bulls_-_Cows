@@ -7,7 +7,7 @@ discord: MartinZ#0894
 """
 
 # Dodelat profily s heslama, statistiky odehranych her, vyhrane, prohrane, 
-# nedokoncene casy, celkovy odehrany cas. POstupne profily pridavat 
+# nedokoncene casy, celkovy odehrany cas. Postupne profily pridavat 
 # a kontrolovat, jestli pri vytvareni uz neexistuje
 
 
@@ -22,6 +22,7 @@ discord: MartinZ#0894
 #
 
 import os
+import datetime
 
 bool_konec_programu = False
 str_volba_menu = None
@@ -32,6 +33,8 @@ str_zadane_cislo = None
 ###############################################################################
 
 while not bool_konec_programu:
+
+    bool_zapis_povolen = False
 
     os.system("cls")
 
@@ -70,6 +73,8 @@ while not bool_konec_programu:
         int_pocet_cows = 0
         int_pocet_pokusu = 0
 
+        bool_start_hry = True
+
         while int_pocet_bulls != 4:
 
             # rand funkce od 1000 do 9999
@@ -79,7 +84,13 @@ while not bool_konec_programu:
 
             int_pocet_pokusu += 1
 
-            
+            # Podm. bool_start_hry == True, aby se start spustil pouze jednou 
+            # na zacatku hry a nespoustel se po kazdem pokusu uzivatele.
+            if bool_start_hry == True:
+                time_start_hry = datetime.datetime.now()
+                time_start_hry_tisk = time_start_hry.strftime("%d.%m.%Y %H:%M:%S")
+                bool_start_hry = False
+
             ###########################################################################
             # Overeni spravnosti uzivatelem zadaneho cisla                            #
             ###########################################################################
@@ -87,7 +98,7 @@ while not bool_konec_programu:
             bool_parametry_cisla_ok = False
 
             # Zjisteni, jestli ma uzivatelem zadane cislo povolene parametry
-            if str_zadane_cislo.isdecimal() == True:
+            if str_zadane_cislo.isdecimal():
                 # Pocet cislic v cisle je od 1 do 3.
                 if len(str_zadane_cislo) >= 1 and len(str_zadane_cislo) <= 3:
                     print(
@@ -135,7 +146,9 @@ while not bool_konec_programu:
                 )
             # Navrat do hlavniho menu
             elif str_zadane_cislo == "q":
-                break           
+                str_status_dokonceno = "Ne"
+                bool_zapis_povolen = True
+                break
             # Uzivatel nezadal cislo.
             else:
                 print(
@@ -187,17 +200,31 @@ while not bool_konec_programu:
                 
                 if int_pocet_bulls == 4:
 
+                    time_konec_hry = datetime.datetime.now()
+
+                    time_odehrany_cas = time_konec_hry - time_start_hry
+
                     print(
                         f"Correct, you've guessed the right number\n"
                         f"in {int_pocet_pokusu} guesses!\n"
                         f"-----------------------------------------------"
                     )
 
-                    bool_navrat_do_menu = False
+                    # Docasne pro debug. Pote smazat !!!
+                    print(
+                        f"Pocet pokusu: {int_pocet_pokusu}\n"
+                        f"Start hry: {time_start_hry}\n"
+                        f"Konec hry: {time_konec_hry}\n" 
+                        f"Odehrany cas: {time_odehrany_cas}\n"
+                        f"-----------------------------------------------"
+                    )
+
                     str_navrat_do_menu = input("Pro navrat do hlavniho menu "
                                                "zadej pismeno q:")
-                    if str_navrat_do_menu == "q":
-                        bool_navrat_do_menu = True
+
+                    str_status_dokonceno = "Ano"
+
+                    bool_zapis_povolen = True
 
         print(f"Pocet pokusu: {int_pocet_pokusu}")
 
@@ -207,12 +234,21 @@ while not bool_konec_programu:
 
     # Smazat bool_zapis_povolen = False a vlozit do oddilu nova 
     # hra !!!!!!!!!!!!!!!!!
-    bool_zapis_povolen = False
+    # bool_zapis_povolen = False
 
     if bool_zapis_povolen:
 
-        file = open("profil_general.txt", "a")
-        file.write("\n" + str(int_pocet_pokusu))
+        if str_status_dokonceno == "Ano":
+            radek = "Start hry: " + str(time_start_hry_tisk) + " Dokonceno: " \
+                + str_status_dokonceno + " Pokusu: " + str(int_pocet_pokusu) \
+                + " Cas: " + str(time_odehrany_cas)
+        else:
+            radek = "Start hry: " + str(time_start_hry_tisk) + " Dokonceno: " \
+                + str_status_dokonceno
+
+ 
+        file = open("Statistiky_obecny.txt", "a")
+        file.write("\n" + str(radek))
         file.close()
 
 
@@ -225,7 +261,7 @@ while not bool_konec_programu:
         os.system("cls")
 
         # Nacteni textoveho souboru
-        soubor_file = open("profil_general.txt", "r")
+        soubor_file = open("Statistiky_obecny.txt", "r")
         soubor_statistiky = soubor_file.read()
         soubor_file.close()
 
@@ -238,11 +274,10 @@ while not bool_konec_programu:
             str_ukonceni_statistik = input("Pro navrat do hlavniho menu "
                                            "zadej pismeno q:")
 
+    # Konec programu.
     if str_volba_menu == "q":
         break
     
-
-
 
     # Hlavni smycka projede pouze jednou
     # bool_konec_programu = True
