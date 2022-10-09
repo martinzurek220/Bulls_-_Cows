@@ -7,51 +7,44 @@ discord: MartinZ#0894
 
 import os
 import datetime
-import time
-
-# TODO dodelat, ze pokud txt soubor neexistuje, tak at se vygeneruje
-# TODO Ve videu Engeta od Petra
-# TODO odehrany csa bez milisekund
+import random
 
 popis_hry_a_pravidla = """------------------------------------------------------
-Vygeneroval jsem pro tebe 4 tajne nahodne cislice
-(napr.: 1578) a tvym ukolem je uhodnout je.
-Pro zadani cisla pouzij klavesnici.
+Vygeneroval jsem pro tebe 4 tajné náhodné číslice
+(např.: 1578) a tvým úkolem je uhodnout je.
+Pro zadání čísla použij klávesnici.
 ------------------------------------------------------
-Upresneni:          
-Hra po zadani cisla vypise pocet bulls a cows
-1 bull = pokud uzivatel uhodne jak cislo, tak jeho umisteni
-1 cow = pokud uzivatel uhodne jak cislo, ale ne jeho umisteni
+Upřesnění:          
+Hra po zadání čísla vypíše počet bulls a cows
+1 bull = pokud uživatel uhodne jak číslo, tak jeho umístění
+1 cow = pokud uživatel uhodne číslo, ale ne jeho umístění
 
-Priklad:
-Tajne cislo:  1257
-Zadane cislo: 1520
-Vysledek: 1 bulls / 2 cow
+Příklad:
+Tajné číslo:  1257
+Zadané číslo: 1520
+Výsledek: 1 bulls / 2 cow
 ------------------------------------------------------
 Pravidla:
-Cislo musi mit 4 znaky.
-Cislo nesmi zacinat nulou.
-V cisle nesmi byt duplicity (cisla se nesmi opakovat)
-------------------------------------------------------    
-Pojdme hrat.
+Číslo musí mít 4 znaky.
+Číslo nesmí začínat nulou.
+V čísle nesmí být duplicity (čísla se nesmí opakovat)
 ------------------------------------------------------"""
 
 
-# TODO dodelat docstring
 def volba_hlavniho_menu(nazev_hry: str) -> str:
     """
+    Funkce vygeneruje hlavní menu.
 
-
-    :param nazev_hry:
-    :return:
+    :param nazev_hry: "nazev_hry"
+    :return: "volba_menu"
     """
     print(
-        "Ahoj hraci!\n"
-        f"Vitam te ve hre {nazev_hry}\n"
-        "V hlavnim menu zvol na klavesnici jednu z moznosti.\n"
+        "Ahoj hráči!\n"
+        f"Vítám tě ve hře {nazev_hry}.\n"
+        "V hlavním menu zvol na klávesnici jednu z možností.\n"
         "------------------------------------------------------\n"
-        "Hlavni menu:\n"
-        " 1 - Nova hra\n"
+        "Hlavní menu:\n"
+        " 1 - Nová hra\n"
         " 2 - Popis hry a pravidla\n"
         " 3 - Statistiky\n"
         " q - Konec hry\n"
@@ -61,14 +54,41 @@ def volba_hlavniho_menu(nazev_hry: str) -> str:
     return volba_menu
 
 
-# TODO Jaky je navratovy typ?
-# TODO dodelat docstring
+def vygeneruj_tajne_cislo() -> str:
+    """
+    Funkce vygeneruje cislo od 1000 do 9999.
+    V cisle nebudou duplicity.
+
+    Příklad výsledku:
+
+    "1258"
+
+    :return: "vygenerovane_tajne_cislo"
+    """
+    vygenerovane_tajne_cislo = 0
+    vygenerovane_tajne_cislo_ok = False
+
+    while not vygenerovane_tajne_cislo_ok:
+        r = random.randrange(1000, 10000, 1)
+        vygenerovane_tajne_cislo = str(r)
+        soucet = 0
+
+        for cislo in vygenerovane_tajne_cislo:
+            soucet += vygenerovane_tajne_cislo.count(cislo)
+        if soucet > 4:
+            vygenerovane_tajne_cislo_ok = False
+        else:
+            vygenerovane_tajne_cislo_ok = True
+
+    return vygenerovane_tajne_cislo
+
+
 def overeni_spravnosti_uzivatelem_zadaneho_cisla(zadane_cislo: str) -> bool:
     """
+    Funkce overi uzivatelem zadane cislo.
 
-
-    :param zadane_cislo:
-    :return:
+    :param zadane_cislo: "zadane_cislo"
+    :return: cislo_ok_nok
     """
     parametry_cisla_ok = False
 
@@ -77,7 +97,7 @@ def overeni_spravnosti_uzivatelem_zadaneho_cisla(zadane_cislo: str) -> bool:
         # Pocet cislic v cisle je od 1 do 3.
         if (len(zadane_cislo)) >= 1 and len(zadane_cislo) <= 3:
             print(
-                "Pocet zadanych cislic je mensi nez 4\n"
+                "Počet zadaných číslic je menší než 4\n"
                 "------------------------------------------------------"
             )
         # Pocet cislic v cisle = 4.
@@ -85,7 +105,7 @@ def overeni_spravnosti_uzivatelem_zadaneho_cisla(zadane_cislo: str) -> bool:
             # Je prvni cislice v cisle nula?
             if zadane_cislo[0] == "0":
                 print(
-                    "Cislo nesmi zacinat nulou\n"
+                    "Číslo nesmí začínat nulou\n"
                     "------------------------------------------------------"
                 )
             # Pokud neni prvni cislice v cisle nula.
@@ -96,7 +116,7 @@ def overeni_spravnosti_uzivatelem_zadaneho_cisla(zadane_cislo: str) -> bool:
                     # Pokud je pocet vyskytu dva a vice
                     if zadane_cislo.count(pocet_stejnych_cisel) > 1:
                         print(
-                            "V zadanem cisle jsou duplicity\n"
+                            "V zadaném čísle jsou duplicity\n"
                             "------------------------------------------------------"
                         )
                         break
@@ -107,7 +127,7 @@ def overeni_spravnosti_uzivatelem_zadaneho_cisla(zadane_cislo: str) -> bool:
         # Pocet cislic v cisle je 5 a vice.
         elif len(zadane_cislo) >= 5:
             print(
-                "Pocet zadanych cislic je vetsi nez 4\n"
+                "Počet zadaných číslic je větší než 4\n"
                 "------------------------------------------------------"
             )
     return parametry_cisla_ok
@@ -132,12 +152,16 @@ def vytvor_casovou_znacku() -> list:
     return [casova_znacka, casova_znacka_tisk]
 
 
-def spocitej_odehrany_cas(pocatecni_cas: datetime, konecny_cas: datetime) -> list:
+def spocitej_odehrany_cas(pocatecni_cas: datetime.datetime, konecny_cas: datetime.datetime) -> list:
     """
+    Funkce spocita rozdil dvou casovych znacek a vrati hodnoty hodiny, minuty, sekundy.
 
+    Pozor:
 
-    :param pocatecni_cas: datetime
-    :param konecny_cas: datetime
+    Funkce odecita pouze casy vygenerovane funkci datetime.datetime.now().
+
+    :param pocatecni_cas: datetime.datetime
+    :param konecny_cas: datetime.datetime
     :return: [hodiny, minuty, sekundy]
     """
     odehrany_cas = konecny_cas - pocatecni_cas
@@ -148,19 +172,23 @@ def spocitej_odehrany_cas(pocatecni_cas: datetime, konecny_cas: datetime) -> lis
     return [int(hodiny), int(minuty), int(sekundy)]
 
 
-# TODO dodelat docstring
-def urci_koncovku(pocet: int, koren_slova: "str") -> str:
+def urci_koncovku(pocet: int, anglicke_slovo: "str") -> str:
     """
+    Funkce doplni/nedoplni koncovku 's' pro anglicke slovo.
 
+    Priklad vystupu:
+
+    0, 1 = bull
+    2 a vice = bulls
 
     :param pocet:
-    :param koren_slova:
+    :param anglicke_slovo:
     :return:
     """
     if pocet == 0 or pocet == 1:
-        slovo_s_koncovkou = koren_slova
+        slovo_s_koncovkou = anglicke_slovo
     else:
-        slovo_s_koncovkou = koren_slova + "s"
+        slovo_s_koncovkou = anglicke_slovo + "s"
     return slovo_s_koncovkou
 
 
@@ -186,6 +214,13 @@ def nacti_txt_soubor(nazev_txt_souboru: str) -> str:
 
 
 def zapis_do_txt_souboru(nazev_txt_souboru: str, obsah: str) -> None:
+    """
+    Funkce zapise do txt souboru.
+
+    :param nazev_txt_souboru: "nazev_txt_souboru"
+    :param obsah: ''' string '''
+    :return:
+    """
     file = open(nazev_txt_souboru, "a")
     file.write("\n" + str(obsah))
     file.close()
@@ -199,7 +234,7 @@ def main():
         # Zapis do souboru zakazan
         zapis_povolen = False
         os.system("cls")
-        zvolene_menu = volba_hlavniho_menu("bulls and cows")
+        zvolene_menu = volba_hlavniho_menu("Bulls and cows")
         hra_dokoncena = ""
 
         # 1 - Nova hra
@@ -209,19 +244,30 @@ def main():
             pocet_bulls = 0
             pocet_cows = 0
             pocet_pokusu = 0
+            start_hry = True
             os.system("cls")
 
-            print("------------------------------------------------------")
-            print("Pro predcasne ukonceni hry zmackni klavesu: q")
-            print("------------------------------------------------------")
+            tajne_cislo = "1395"
+            # tajne_cislo = vygeneruj_tajne_cislo()
+
+            print(
+                "------------------------------------------------------\n"
+                "Pro předčasné ukončení hry zmáčkni klávesu: q\n"
+                "------------------------------------------------------\n"
+                "Pojďme hrát.\n"
+                "------------------------------------------------------"
+            )
 
             while pocet_bulls != 4:
                 zadane_cislo_ok = False
-                uzivatelem_zadane_cislo = input("Zadej 4ciferne cislo: ")
-                # TODO dodelat rand funkci
-                tajne_cislo = "1234"
+                uzivatelem_zadane_cislo = input("Zadej 4ciferné číslo: ")
                 pocet_pokusu += 1
-                time_start_hry = vytvor_casovou_znacku()
+
+                # Podm. bool_start_hry == True, aby se start spustil pouze jednou
+                # na zacatku hry a nespoustel se po kazdem pokusu uzivatele.
+                if start_hry:
+                    time_start_hry = vytvor_casovou_znacku()
+                    start_hry = False
 
                 # Kontrola zadaneho vstupu
                 if uzivatelem_zadane_cislo.isdecimal():
@@ -240,7 +286,7 @@ def main():
                 # Uzivatel nezadal cislo.
                 else:
                     print(
-                        "Nezadal jsi cislo\n"
+                        "Nezadal jsi číslo\n"
                         "------------------------------------------------------"
                     )
 
@@ -275,28 +321,25 @@ def main():
                         odehrany_cas_string = f"{odehrany_cas[0]} hod : {odehrany_cas[1]} min : " +\
                                               f"{odehrany_cas[2]} sek"
                         print(
-                            f"Spravne, uhodl jsi tajne cislo.\n",
-                            f"Pocet pokusu: {pocet_pokusu}\n",
-                            f"Odehrany cas:   {odehrany_cas_string},"
+                            f"Správně, uhodl jsi tajné číslo.\n",
+                            f"Počet pokusů: {pocet_pokusu}\n",
+                            f"Odehraný čas:   {odehrany_cas_string}",
                             f"\n------------------------------------------------------",
                             sep=""
                         )
-                        print(time_start_hry)
-                        print(time_konec_hry)
-                        input("Pro navrat do hlavniho menu zadej pismeno q: ")
+                        input("Pro návrat do hlavního menu zadej písmeno q: ")
                         hra_dokoncena = "Ano"
                         zapis_povolen = True
-
 
         # Pokud je povolen zapis do txt souboru, uloz do nej data odehrane hry
         if zapis_povolen:
             # Zpracovani dat jedne odehrane hry
             if hra_dokoncena == "Ano":
-                radek = "Start hry: " + str(time_start_hry[1]) + ", Dokonceno: " \
-                        + hra_dokoncena + ", Pocet pokusu: " + str(pocet_pokusu) \
-                        + ", Odehrany cas: " + odehrany_cas_string
+                radek = "Start hry: " + str(time_start_hry[1]) + ", Dokončeno: " \
+                        + hra_dokoncena + ", Počet pokusů: " + str(pocet_pokusu) \
+                        + ", Odehraný čas: " + odehrany_cas_string
             else:
-                radek = "Start hry: " + str(time_start_hry[1]) + ", Dokonceno: " \
+                radek = "Start hry: " + str(time_start_hry[1]) + ", Dokončeno: " \
                         + hra_dokoncena
             zapis_do_txt_souboru(nazev_souboru, radek)
 
@@ -304,13 +347,21 @@ def main():
         if zvolene_menu == "2":
             os.system("cls")
             print(popis_hry_a_pravidla)
-            input("\nPro navrat do hlavniho menu stiskni ENTER: ")
+            input("\nPro návrat do hlavního menu stiskni ENTER: ")
 
         # Zobrazeni statistik
         if zvolene_menu == "3":
             os.system("cls")
-            print(nacti_txt_soubor(nazev_souboru))
-            input("\nPro navrat do hlavniho menu stiskni ENTER: ")
+
+            # True/False podle toho, jestli txt soubor ve slozce je nebo ne
+            overeni_existence_txt_souboru = os.path.isfile(nazev_souboru)
+
+            if overeni_existence_txt_souboru:
+                print(nacti_txt_soubor(nazev_souboru))
+            else:
+                print("K dispozici zatím nejsou žádné statistiky odehraných her")
+
+            input("\nPro návrat do hlavního menu stiskni ENTER: ")
 
         # Konec programu
         if zvolene_menu == "q":
