@@ -9,7 +9,7 @@ Hra náhodně vygeneruje 4 tajné číslice a úkolem uživatele je napsat do ko
 
 Hra po zadání čísla vypíše počet `bulls` a `cows`.<br>
 1 `bull` = pokud uživatel uhodne jak číslo, tak jeho umístění<br>
-1 `cow` = pokud uživatel uhodne jak číslo, ale ne jeho umístění
+1 `cow` = pokud uživatel uhodne číslo, ale ne jeho umístění
 
 Hra končí ve chvíli, kdy uživatel uhodne všechny bulls.<br>
 `4 bulls / 0 cow`
@@ -26,16 +26,12 @@ Součástí hry jsou:<br>
 ## Ukázka hry
 Spuštění hry:
 ```
-Ahoj hraci!
-Vitam te ve hre bulls and cows
-V hlavnim menu zvol na klavesnici jednu z moznosti.
+Ahoj hráči!
+Vítám tě ve hře Bulls and cows.
+V hlavním menu zvol na klávesnici jednu z možností.
 ------------------------------------------------------
-Ahoj hraci!
-Vitam te ve hre bulls and cows
-V hlavnim menu zvol na klavesnici jednu z moznosti.
-------------------------------------------------------
-Hlavni menu:
- 1 - Nova hra
+Hlavní menu:
+ 1 - Nová hra
  2 - Popis hry a pravidla
  3 - Statistiky
  q - Konec hry
@@ -44,10 +40,30 @@ Zvol menu (1/2/3/q):
 ```
 Ukázka úspěšně dokončené hry:
 ```
-
+------------------------------------------------------
+Pro předčasné ukončení hry zmáčkni klávesu: q
+------------------------------------------------------
+Pojďme hrát.
+------------------------------------------------------
+Zadej 4ciferné číslo: 1234
+1 bull / 1 cow
+------------------------------------------------------
+Zadej 4ciferné číslo: 1385
+3 bulls / 0 cow
+------------------------------------------------------
+Zadej 4ciferné číslo: 1395
+4 bulls / 0 cow
+------------------------------------------------------
+Správně, uhodl jsi tajné číslo.
+Počet pokusů: 3
+Odehraný čas:   0 hod : 0 min : 38 sek
+------------------------------------------------------
+Pro návrat do hlavního menu zadej písmeno q:
 ```
 Ukázka statistik odehraných her:
 ```
-
+Start hry: 09.10.2022 13:20:18, Dokončeno: Ano, Počet pokusů: 3, Odehraný čas: 0 hod : 0 min : 38 sek
+Start hry: 09.10.2022 13:22:17, Dokončeno: Ano, Počet pokusů: 7, Odehraný čas: 0 hod : 2 min : 12 sek
+Start hry: 09.10.2022 13:26:28, Dokončeno: Ne
 ```
 
