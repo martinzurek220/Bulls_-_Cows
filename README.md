@@ -1,4 +1,4 @@
-# Bulls and cows
+# bulls and cows
 Druhý závěrečný projekt na Python Akademii od Engeta
 
 ## Popis projektu
